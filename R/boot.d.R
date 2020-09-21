@@ -13,7 +13,7 @@
 #' @param est a vector of unbiased estimates of standardized mean differences.
 #' @param adjust if biased estimates (i.e., g values) are provided, \code{adjust} must be set to \code{TRUE} to compensate for small sample bias. By default, \code{adjust} is set to \code{FALSE}.
 #' @param model choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.
-#' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for more details.
+#' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor:rma.uni]{rma}} for more details.
 #' @param nrep number of replications used in bootstrap imulations. Default to 10^4.
 #' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
 #' @param boot.include if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).
@@ -46,7 +46,7 @@
 #' cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges, 1981)
 #' d <- cm*g
 #'
-#' \donttest{
+#' \dontrun{
 #' boot.run <- boot.d(n1, n2, est = d, model = 'random', p_cut = 0.05)
 #' # is equivalent to:
 #' boot.run2 <- boot.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.05)
@@ -54,13 +54,11 @@
 #'
 #'# Demo 2: A hypothetical meta-analysis of 15 studies with 3 moderators.
 #' hypo_moder <- boot.heterogeneity:::hypo_moder
-#' \donttest{
+#' \dontrun{
 #' boot.run3 <- boot.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed',
 #' mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
 #' }
 #'
-#' # Note: this boot.d function is supposed to replace its
-#' # earlier version in \link[mc.heterogeneity]{mc.d}.
 #' @export
 
 boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = FALSE, verbose = FALSE) {
